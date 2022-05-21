@@ -137,6 +137,13 @@ namespace DDDSaveToolSharp.Core.Models
             return HasAppearanceData() && Appearance.HasChildNodes && HasStatsData() && Stats.HasChildNodes;
         }
 
+        public void Clear()
+        {
+            Appearance.RemoveAll();
+            Stats.RemoveAll();
+            RemoveAll();
+        }
+
         public static Preset GenerateFromSavFile(Sav sav, PlayerType targetPlayer)
         {
             var preset = new Preset();

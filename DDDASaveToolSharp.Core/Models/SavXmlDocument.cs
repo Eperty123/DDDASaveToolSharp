@@ -193,32 +193,50 @@ namespace DDDSaveToolSharp.Core.Models
 
         IEnumerable<int> GetAsciiNumericValueFromName(string name)
         {
-            var nameInInt = new List<int>();
-            foreach (char letter in name)
-                nameInInt.Add(letter);
-
-            if (nameInInt.Count < Sav.MaxNameLength)
+            try
             {
-                int missingPaddingAmount = Sav.MaxNameLength - nameInInt.Count;
-                for (int i = 0; i < missingPaddingAmount; i++)
-                    nameInInt.Add(0);
+                var nameInInt = new List<int>();
+                foreach (char letter in name)
+                    nameInInt.Add(letter);
+
+                if (nameInInt.Count < Sav.MaxNameLength)
+                {
+                    int missingPaddingAmount = Sav.MaxNameLength - nameInInt.Count;
+                    for (int i = 0; i < missingPaddingAmount; i++)
+                        nameInInt.Add(0);
+                }
+                return nameInInt;
             }
-            return nameInInt;
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
 
         IEnumerable<char> GetLettersFromNameNode(XmlNode nameNode)
         {
-            List<char> letters = new List<char>();
-            foreach (XmlNode letterNode in nameNode)
+            try
             {
-                var letterValue = letterNode.Attributes["value"].Value;
-                int.TryParse(letterValue, out var letterInt);
-                if (letterInt != 0) letters.Add(Convert.ToChar(letterInt));
-                else break;
-            }
+                List<char> letters = new List<char>();
+                foreach (XmlNode letterNode in nameNode)
+                {
+                    var valueAttribute = letterNode.Attributes["value"];
+                    if (valueAttribute != null)
+                    {
+                        var letterValue = valueAttribute.Value;
+                        int.TryParse(letterValue, out var letterInt);
+                        if (letterInt != 0) letters.Add(Convert.ToChar(letterInt));
+                        else break;
+                    }
+                }
 
-            return letters;
+                return letters;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }

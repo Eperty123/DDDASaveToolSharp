@@ -276,7 +276,13 @@ namespace DDDSaveToolSharp.Core.Models
 
         public bool IsLoaded()
         {
-            return XmlData != null;
+            return XmlData != null && XmlData.HasChildNodes;
+        }
+
+        public void Clear()
+        {
+            if (XmlData != null)
+                XmlData.RemoveAll();
         }
 
         /// <summary>
